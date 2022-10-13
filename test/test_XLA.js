@@ -144,24 +144,19 @@ describe("Testing TSM Contracts", function () {
 
     await firstValve.addGlasses([firstGlass.address, secondGlass.address]);
     await secondValve.connect(accounts[7]).addGlasses([secondGlass.address, thirdGlass.address]);
-    console.log("Valve balance");
-    console.log(await firstValve.balance());
-    console.log(await secondValve.balance());
-    console.log("Glasses balance");
-    console.log(await firstGlass.balance());
-    console.log(await secondGlass.balance());
-    console.log(await thirdGlass.balance());
-
+    
     await firstValve.fillGlass();
     await secondValve.fillGlass();
-
-    console.log(await firstGlass.balance());
-    console.log(await secondGlass.balance());
-    console.log(await thirdGlass.balance());
 
     expect(await firstGlass.balance()).to.equal(await firstGlass.border());
     // неправильно работает логика контракта
     // expect(await secondGlass.balance()).to.equal(await secondGlass.border());
     // expect(await thirdGlass.fullness()).to.equal(ethers.utils.parseEther("1.5"));
+
+    await secondGlass.connect(accounts[5]).Withdraw();
+    expect(await TestToken.balanceOf(accounts[5].address)).to.equal(ethers.utils.parseEther("2.5"));
+    // Снова неправильно срабатывает логика
+    // expect(await TestToken1.balanceOf(accounts[5].address)).to.equal(ethers.utils.parseEther("4.5"));
+    
   })
 })
